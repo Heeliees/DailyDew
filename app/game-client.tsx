@@ -8,6 +8,10 @@ type GlobalStats = { distribution: number[]; players: number; average: number | 
 type Play = { date: string; score: number; pattern: boolean[] };
 type History = { plays: Play[] };
 const EMPTY_GLOBAL: GlobalStats = { distribution: Array(9).fill(0), players: 0, average: null };
+const API_ROOT =
+  typeof window !== "undefined" && window.location.hostname === "heeliees.github.io"
+    ? "https://daily-dew.raheelio123.chatgpt.site"
+    : "";
 
 function nzDate() {
   return new Intl.DateTimeFormat("en-CA", { timeZone: "Pacific/Auckland", year: "numeric", month: "2-digit", day: "2-digit" }).format(new Date());
@@ -80,7 +84,7 @@ export default function DailyGame() {
       const today = saved.plays.find((play) => play.date === date);
       if (today) { setPattern(today.pattern ?? Array.from({ length: 8 }, (_, i) => i < today.score)); setFinished(true); }
     } catch { setHistory({ plays: [] }); }
-    fetch(`/api/stats?date=${date}`)
+    fetch(`${API_ROOT}/api/stats?date=${date}`)
       .then(async (response) => setGlobal((await response.json()) as GlobalStats))
       .catch(() => undefined);
   }, [date]);
@@ -107,7 +111,7 @@ export default function DailyGame() {
     let deviceId = localStorage.getItem("daily-dew-device");
     if (!deviceId) { deviceId = crypto.randomUUID(); localStorage.setItem("daily-dew-device", deviceId); }
     try {
-      const response = await fetch("/api/stats", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ date, score: nextScore, deviceId }) });
+      const response = await fetch(`${API_ROOT}/api/stats`, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ date, score: nextScore, deviceId }) });
       if (response.ok) setGlobal(await response.json());
     } catch { /* Local results remain available. */ }
   }

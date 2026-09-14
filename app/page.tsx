@@ -8,7 +8,7 @@ export default function Home() {
       <header className="site-header">
         <div className="header-inner">
           <a className="brand" href="/" aria-label="Daily Dew home">
-            <img src="/daily-dew-chicken.png" alt="" />
+            <img src="./daily-dew-chicken.png" alt="" />
             <div><span>Daily</span><strong>Dew</strong></div>
           </a>
           <div className="date-plaque">

@@ -7,7 +7,7 @@ Daily Dew is a free, fan-made daily Stardew Valley trivia game. Every New Zealan
 - forgiving spelling, local streaks and score history
 - an anonymous global score distribution and daily average
 
-Play it at [daily-dew.raheelio123.chatgpt.site](https://daily-dew.raheelio123.chatgpt.site).
+Play it at [heeliees.github.io/DailyDew](https://heeliees.github.io/DailyDew/).
 
 ## Development
 
