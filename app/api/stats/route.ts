@@ -19,15 +19,24 @@ export async function OPTIONS() {
 async function readStats(date: string) {
   if (!env.DB) throw new Error("Scoreboard unavailable");
   const rows = await env.DB.prepare(
-    "SELECT score, COUNT(*) AS count FROM daily_scores WHERE puzzle_date = ? GROUP BY score ORDER BY score"
-  ).bind(date).all<{ score: number; count: number }>();
+    "SELECT score, difficulty, COUNT(*) AS count FROM daily_scores WHERE puzzle_date = ? GROUP BY score, difficulty ORDER BY score"
+  ).bind(date).all<{ score: number; difficulty: string; count: number }>();
   const distribution = Array.from({ length: 9 }, () => 0);
-  for (const row of rows.results) distribution[row.score] = Number(row.count);
+  const easy = Array(9).fill(0), hard = Array(9).fill(0);
+  for (const row of rows.results) {
+    distribution[row.score] += Number(row.count);
+    (row.difficulty === "hard" ? hard : easy)[row.score] += Number(row.count);
+  }
+  const summarize = (values: number[]) => {
+    const players = values.reduce((a, b) => a + b, 0);
+    return { distribution: values, players, average: players ? values.reduce((sum, n, score) => sum + n * score, 0) / players : null };
+  };
   const summary = await env.DB.prepare(
     "SELECT COUNT(*) AS players, AVG(score) AS average FROM daily_scores WHERE puzzle_date = ?"
   ).bind(date).first<{ players: number; average: number | null }>();
   return {
     distribution,
+    easy: summarize(easy), hard: summarize(hard),
     players: Number(summary?.players ?? 0),
     average: summary?.average == null ? null : Number(summary.average)
   };
@@ -45,7 +54,8 @@ export async function GET(request: Request) {
 
 export async function POST(request: Request) {
   try {
-    const body = (await request.json()) as { date?: string; score?: number; deviceId?: string };
+    const body = (await request.json()) as { date?: string; score?: number; deviceId?: string; difficulty?: string };
+    if (body.difficulty !== undefined && body.difficulty !== "easy" && body.difficulty !== "hard") return json({ error: "Invalid difficulty" }, 400);
     if (!body.date || !validDate.test(body.date) || !Number.isInteger(body.score) ||
         body.score! < 0 || body.score! > 8 || !body.deviceId ||
         !/^[a-zA-Z0-9-]{16,64}$/.test(body.deviceId)) {
@@ -53,8 +63,8 @@ export async function POST(request: Request) {
     }
     if (!env.DB) throw new Error("Scoreboard unavailable");
     await env.DB.prepare(
-      "INSERT OR IGNORE INTO daily_scores (puzzle_date, score, submission_id) VALUES (?, ?, ?)"
-    ).bind(body.date, body.score, `${body.date}:${body.deviceId}`).run();
+      "INSERT OR IGNORE INTO daily_scores (puzzle_date, score, submission_id, difficulty) VALUES (?, ?, ?, ?)"
+    ).bind(body.date, body.score, `${body.date}:${body.deviceId}`, body.difficulty ?? "easy").run();
     return json(await readStats(body.date));
   } catch {
     return json({ error: "Scoreboard unavailable" }, 503);

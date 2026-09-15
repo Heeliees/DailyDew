@@ -1,0 +1,1 @@
+ALTER TABLE `daily_scores` ADD `difficulty` text DEFAULT 'easy' NOT NULL;

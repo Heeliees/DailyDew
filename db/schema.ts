@@ -7,6 +7,7 @@ export const dailyScores = sqliteTable(
     id: integer("id").primaryKey({ autoIncrement: true }),
     puzzleDate: text("puzzle_date").notNull(),
     score: integer("score").notNull(),
+    difficulty: text("difficulty").notNull().default("easy"),
     submissionId: text("submission_id").notNull(),
     createdAt: text("created_at").notNull().default(sql`CURRENT_TIMESTAMP`)
   },

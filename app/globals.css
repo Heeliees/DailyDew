@@ -179,3 +179,25 @@ footer p { margin: 5px; } footer a { font-weight: 900; text-underline-offset: 3p
   .result-actions { flex-direction: column; gap: 11px; }.primary-button { width: 100%; }
 }
 @media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation: none !important; transition: none !important; } }
+/* Difficulty choice and the three daily score series. */
+.difficulty-card > p { margin: 18px 0; }
+.difficulty-options { display:grid; grid-template-columns:1fr 1fr; gap:16px; margin:28px 0; }
+.difficulty-options button { padding:24px 16px; border:3px solid #805330; border-radius:10px; background:#fff1c7; cursor:pointer; text-align:left; }
+.difficulty-options button:hover, .difficulty-options button:focus-visible { background:#f6d78a; outline:3px solid #46632e; }
+.difficulty-options strong { display:block; font-size:24px; margin-bottom:12px; }
+.difficulty-options span { font-size:16px; line-height:1.6; }
+.answer-reveal { display:flex; align-items:center; gap:18px; padding:18px 0; }
+.answer-reveal img { object-fit:contain; image-rendering:pixelated; flex-shrink:0; }
+.mode-averages { display:grid; grid-template-columns:repeat(3,1fr); gap:8px; margin:20px 0; text-align:center; }
+.mode-averages strong { display:block; font-size:26px; }
+.mode-averages span, .mode-averages small { display:block; font-size:14px; }
+.chart-legend { display:flex; justify-content:center; flex-wrap:wrap; gap:16px; font-size:14px; }
+.chart-legend i { display:inline-block; width:12px; height:12px; margin-right:6px; }
+.easy { background:#548747; }.hard { background:#8558a5; }.combined { background:#bf8130; }
+.grouped-chart { display:flex; gap:8px; height:180px; margin:20px 0; }
+.score-group { flex:1; min-width:0; text-align:center; font-size:12px; }
+.score-bars { height:150px; display:flex; align-items:flex-end; gap:2px; border-bottom:1px solid #94784b; }
+.score-bars span { flex:1; min-width:2px; border-radius:3px 3px 0 0; }
+.score-counts { font-size:14px; margin-top:18px; }
+.score-counts summary { cursor:pointer; }.score-counts table { width:100%; margin-top:10px; text-align:center; }
+@media(max-width:480px) { .difficulty-options { grid-template-columns:1fr; }.grouped-chart { gap:4px; }.mode-averages span { font-size:12px; } }

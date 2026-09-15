@@ -65,6 +65,23 @@ export const generalEntries: QuizEntry[] = [
   { answer: "Pepper Rex", category: "Monster", icon: "🦖", clues: ["Found on prehistoric Skull Cavern floors.", "Breathes fire in one direction.", "May drop a Dinosaur Egg.", "Defeating 50 completes an eradication goal."], source: "https://stardewvalleywiki.com/Pepper_Rex" }
 ];
 
+const hardClues = ["Loves both Amethyst and Pumpkin.","Loves both Complete Breakfast and Salmon Dinner.","Their 8-heart event is a public reading of their novel in the Museum.","Their 8-heart event is Clothing Therapy.","Hates receiving a Prismatic Shard.","Their 10-heart event involves a hot-air balloon ride.","Loves both Goat Cheese and Salad.","Loves both Battery Pack and Cauliflower.","Hates receiving a Rabbit's Foot.","Loves both Maple Bar and Tigerseye.","Loves both Frozen Tear and Obsidian.","Their 8-heart event reveals blue chickens.","Their 2-heart event leads to receiving the Tea Sapling recipe.","Loves both Leek and Fried Mushroom.","Can become your roommate when given a Void Ghost Pendant.","Their 4-heart event teaches you the Wild Bait recipe.","Loves both Peach and Spaghetti.","Loves both Octopus and Sea Cucumber."];
+for (const [index, entry] of villagers.entries()) entry.clues[0] = hardClues[index];
+villagers.push(...[{"answer":"Demetrius","clues":["Offers to set up fruit bats or mushrooms in your farm cave.","Loves Bean Hotpot, Ice Cream, Rice Pudding, and Strawberry.","Studies local wildlife.","Lives with Robin in the Mountains."],"category":"Villager","icon":"🧑‍🌾","source":"https://stardewvalleywiki.com/Demetrius"},{"answer":"Evelyn","clues":["Their 4-heart event teaches you the Cookie recipe.","Loves Beet, Chocolate Cake, Diamond, Fairy Rose, Stuffing, and Tulip.","Tends the town flowers.","Lives with George and Alex."],"category":"Villager","icon":"🧑‍🌾","source":"https://stardewvalleywiki.com/Evelyn"},{"answer":"Gus","clues":["Their 5-heart event gives you a Mini-Jukebox and its recipe.","Loves Diamond, Escargot, Fish Taco, Orange, and Tropical Curry.","Owns the Stardrop Saloon.","Employs Emily."],"category":"Villager","icon":"🧑‍🌾","source":"https://stardewvalleywiki.com/Gus"},{"answer":"Marnie","clues":["Loves both Farmer's Lunch and Pumpkin Pie.","Sells animals and animal supplies.","Lives with Jas and Shane.","Their birthday is Fall 18."],"category":"Villager","icon":"🧑‍🌾","source":"https://stardewvalleywiki.com/Marnie"},{"answer":"Clint","clues":["Loves both Artichoke Dip and Fiddlehead Risotto.","Upgrades your tools and opens geodes.","Works at the Blacksmith shop.","Their birthday is Winter 26."],"category":"Villager","icon":"🧑‍🌾","source":"https://stardewvalleywiki.com/Clint"},{"answer":"Lewis","clues":["Loves both Glazed Yams and Autumn's Bounty.","Is the mayor of Pelican Town.","Asks you to retrieve his lucky purple shorts.","Their birthday is Spring 7."],"category":"Villager","icon":"🧑‍🌾","source":"https://stardewvalleywiki.com/Lewis"}]);
+generalEntries.push(...[{"answer":"Rainbow Trout","clues":["Its pond can very rarely produce a Prismatic Shard at population nine or more.","Caught in rivers and the Mountain Lake on sunny summer days.","Available from 6:00 AM to 7:00 PM.","Used to cook Trout Soup."],"category":"Fish","icon":"🐟","source":"https://stardewvalleywiki.com/Rainbow_Trout"},{"answer":"Octopus","clues":["Its pond can produce Omni Geodes at population nine or more.","Caught in the ocean in summer from 6:00 AM to 1:00 PM.","Has difficulty 95 and sinker behaviour.","Willy loves receiving this fish."],"category":"Fish","icon":"🐟","source":"https://stardewvalleywiki.com/Octopus"},{"answer":"Blobfish","clues":["Its pond may request a Rainbow Shell or Rice Pudding at population seven.","Caught on the Night Market submarine.","Its pond can produce Pearls.","Has difficulty 75 and floater behaviour."],"category":"Fish","icon":"🐟","source":"https://stardewvalleywiki.com/Blobfish"},{"answer":"Ice Pip","clues":["Its pond first requests ten Iron Ore.","Caught on floor 60 of the Mines.","Its pond can produce Frozen Geodes.","Has difficulty 85 and dart behaviour."],"category":"Fish","icon":"🐟","source":"https://stardewvalleywiki.com/Ice_Pip"},{"answer":"Super Cucumber","clues":["Its pond turns purple at population five.","Caught in the ocean on summer and fall evenings.","Its pond can produce Iridium Ore.","Available from 6:00 PM to 2:00 AM."],"category":"Fish","icon":"🐟","source":"https://stardewvalleywiki.com/Super_Cucumber"}]);
+const fishClues: Record<string, string[]> = {
+Pufferfish: ["Caught in the ocean on sunny summer days, from noon to 4:00 PM.", "Has difficulty 80 and floater behaviour."],
+Catfish: ["Caught in the town river during spring or fall rain.", "Has difficulty 75 and mixed behaviour."],
+Sturgeon: ["Its Roe is the only Roe that becomes Caviar.", "Its pond first requests one Diamond."],
+"Lava Eel": ["Its pond first requests three Fire Quartz.", "Caught on floor 100 of the Mines or at the Volcano Caldera."],
+Woodskip: ["Its pond first requests ten Hardwood.", "Caught in the Secret Woods pond or on the Forest Farm."],
+Walleye: ["Caught in rivers, the Forest Pond, or Mountain Lake during fall rain.", "Available from noon to 2:00 AM and used in the Night Fishing Bundle."]
+};
+for (const entry of generalEntries) {
+if (fishClues[entry.answer]) entry.clues = [...fishClues[entry.answer], ...entry.clues.slice(2)];
+entry.clues = entry.clues.map(clue => clue.replace("Ten pieces are needed for the Stable.", "One hundred pieces are needed for the Stable."));
+}
+
 function hashSeed(value: string) {
   let h = 2166136261;
   for (let i = 0; i < value.length; i += 1) {
@@ -91,9 +108,26 @@ function shuffled<T>(items: T[], seedText: string) {
   return result;
 }
 
-export function getDailyPuzzle(date: string) {
-  return [
-    ...shuffled(villagers, `villagers-${CATALOG_VERSION}-${date}`).slice(0, 3),
-    ...shuffled(generalEntries, `general-${CATALOG_VERSION}-${date}`).slice(0, 5)
-  ];
+function legacyPuzzle(date: string) {
+return [...shuffled(villagers.slice(0,18), `villagers-2026.1-${date}`).slice(0,3), ...shuffled(generalEntries.slice(0,32), `general-2026.1-${date}`).slice(0,5)];
+}
+const epoch = Date.parse("2026-09-16T00:00:00Z");
+const cache = new Map<string, QuizEntry[]>();
+export function getDailyPuzzle(date: string): QuizEntry[] {
+if (date < "2026-09-16") return legacyPuzzle(date);
+if (cache.has(date)) return cache.get(date)!;
+const recent: QuizEntry[][] = [legacyPuzzle("2026-09-14"), legacyPuzzle("2026-09-15")];
+const days = Math.floor((Date.parse(date + "T00:00:00Z") - epoch) / 86400000);
+for (let day = 0; day <= days; day++) {
+const key = new Date(epoch + day * 86400000).toISOString().slice(0,10);
+const excluded = new Set(recent.flat().map(entry => entry.answer));
+const pick = (entries: QuizEntry[], count: number, kind: string) => {
+const available = entries.filter(entry => !excluded.has(entry.answer));
+if (available.length < count) throw new Error("Catalogue too small for seven-day rotation");
+return shuffled(available, kind + "-" + CATALOG_VERSION + "-" + key).slice(0,count);
+};
+const puzzle = [...pick(villagers,3,"villagers"), ...pick(generalEntries,5,"general")];
+cache.set(key,puzzle); recent.push(puzzle); if (recent.length > 6) recent.shift();
+}
+return cache.get(date)!;
 }

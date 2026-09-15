@@ -7,7 +7,7 @@ export default function Home() {
     <main className="site-shell">
       <header className="site-header">
         <div className="header-inner">
-          <a className="brand" href="/" aria-label="Daily Dew home">
+          <a className="brand" href="./" aria-label="Daily Dew home">
             <img src="./daily-dew-chicken.png" alt="" />
             <div><span>Daily</span><strong>Dew</strong></div>
           </a>
@@ -37,7 +37,7 @@ export default function Home() {
         </aside>
       </div>
       <footer>
-        <p>Questions are based on the <a href="https://stardewvalleywiki.com/Stardew_Valley_Wiki" target="_blank" rel="noreferrer">Stardew Valley Wiki</a>.</p>
+        <p>Clues and sprites: <a href="https://stardewvalleywiki.com/Stardew_Valley_Wiki" target="_blank" rel="noreferrer">Stardew Valley Wiki</a>. Screenshots: <a href="https://stardewguide.com/guides/stardew-valley-secret-woods" target="_blank" rel="noreferrer">Stardew Guide</a>, <a href="https://www.idntimes.com/tech/games/tips-ampuh-capai-lantai-100-skull-cavern-di-stardew-valley-c1c2-01-4q4bp-s3jfrv" target="_blank" rel="noreferrer">IDN Times</a>, <a href="https://aywren.com/2016/05/26/stardew-valley-first-summers-end/" target="_blank" rel="noreferrer">Aywren</a>. Game artwork © ConcernedApe.</p>
         <p>Daily Dew is a fan-made trivia game and is not affiliated with ConcernedApe.</p>
       </footer>
     </main>
