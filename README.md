@@ -31,6 +31,14 @@ Question facts are curated from the [Stardew Valley Wiki](https://stardewvalleyw
 
 ## September 2026 gameplay update
 
+### Variety update — 23 September (New Zealand time)
+
+The catalogue now contains 34 villagers and 49 other subjects. Each has two curated, identifying Hard clue sets; these alternate on successive appearances, with three or two supporting clues selected for Easy. Both difficulties still receive the same answers and the Hard clues are included in Easy.
+
+The scheduler gives priority to least-recently-used answers after their six-day cooldown. General questions favour distinct categories, with at most two questions from any one category. Published puzzles through 22 September retain both their original answers and clues via the immutable `catalog-legacy.ts` implementation. Its recent history seeds the new scheduler at the cutover.
+
+During annual refreshes, add verified subjects, two identifying clue sets and an answer image together. Preserve historical versions and cut over at a future New Zealand midnight. Tests cover the transition, rolling seven-day uniqueness, category diversity, full catalogue coverage and alternating clue sets.
+
 Easy and Hard share the same eight answers. Hard shows the first clue for villagers and the first two clues for other entries; those clues must uniquely identify the answer together. A device gets one scored run per date, with its selected difficulty retained on reload. Existing results without a difficulty count as Easy.
 
 The new rotation begins on 16 September 2026 (New Zealand date), preserving earlier puzzles and excluding answers from the previous six days. The catalogue must contain at least 21 villagers and 35 other unique subjects. When refreshing the catalogue annually, preserve published schedules and the previous six days of answers at the cutover; do not blindly change historical seeds or entry ordering.
